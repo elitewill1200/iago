@@ -1,8 +1,6 @@
 public class neuralNet{
   public neuralNet(){
-
   }
-
   public neuralNet(int inputs, int hiddenLayers, int neuronsPerLayer, int outputs){
   }
   private int[] activation(boolean[][]){
