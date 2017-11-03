@@ -1,2 +1,6 @@
 This is just a practice. Get gud fellas
+<<<<<<< HEAD
 Nathan Hayes
+=======
+Will2
+>>>>>>> 3b4ff156d52d06bb0d8da9c8a3d85af104f517fc
