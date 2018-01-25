@@ -1,197 +1,96 @@
+import java.util.Arrays;
 
 public class Othello {
-	public Boolean[][] board;
-	boolean p1Turn; //where true is black and false is white
-	boolean passed, isGameOver;
-	String p1AI, p2AI;
-	
-	//Initialize board with starting pieces, where boardSize is never odd
-	public Othello(int boardSize) {
-		board = new Boolean[boardSize][boardSize];
-		
-		board[boardSize/2-1][boardSize/2-1] = false;
-		board[boardSize/2][boardSize/2-1] = true;
-		board[boardSize/2-1][boardSize/2] = true;
-		board[boardSize/2][boardSize/2] = false;
-		
-		p1Turn = true;
-		passed = isGameOver = false;
-		p1AI = "Greedy";
-		p2AI = "Greedy";
-	}
-	//Returns a list of ints that are valid coordinates to move to for the given player
-	public int[][] getLegalMoves() {
-		int out[][] = new int[board.length][board.length];		
-		int count;
-		int points;
-		for(int x = 0; x < board.length; x++)
-			for(int y = 0; y < board.length; y++) {
-				points = 0;
-				if(board[x][y]==null)			
-					for(int[] i: getAdjacents(x,y)){
-						count = 0;
-						int xi = i[0] - x;
-						int yi = i[1] - y;
-						int xs = i[0];
-						int ys = i[1];
-						while(true){
-							if(xs<board.length&&xs>-1&&ys<board.length&&ys>-1){
-								if(board[xs][ys]!=null && board[xs][ys]==p1Turn){
-									points+=count;
-									break;
-								}else if(board[xs][ys]==null){
-									break;
-								}
-								count++;
-							}else{
-								break;
-							}
-							xs += xi;
-							ys += yi;
-						}						
-					}
-				out[x][y] = points;
-			}
-		return out;
-	}
-	
-	public int[][] getAdjacents(int x, int y) {
-		int[][] adjacents = new int[((x==0||x==board.length-1)?2:3)*((y==0||y == board.length-1)?2:3)-1][2];
-		int count = 0;
-		for(int i = -1; i <= 1; i++) {
-			for(int j = -1; j <= 1; j++) {
-				if(x+i < board.length && x+i >= 0 && y+j < board.length && y+j >= 0 && !(i == 0 && j == 0))
-				{
-					adjacents[count][0] = x+i;
-					adjacents[count][1] = y+j;
-					count++;
-				}
-			}
-		}
-		
-		return adjacents;
-	}
-	
-	public void takeTurn() {
-		int[][] moves = getLegalMoves();
-		int movesLeft = 0;
-		for(int[] i: moves)
-			for(int j: i){
-				if(j > 0) movesLeft++;
-			}
-		if(movesLeft==0) {
-			if(!passed)
-				passed = true;
-			else
-				isGameOver = true;
-		}
-		else {
-			if(p1AI.equals("Greedy")) {
-				int maxX = 0, maxY = 0;
-				for(int i = 0; i < moves.length; i++) {
-					for(int j = 0; j < moves[0].length; j++) {
-						if(moves[maxX][maxY] < moves[i][j] || (moves[maxX][maxY] == moves[i][j])&&Math.random()<.2) {
-							maxX = i;
-							maxY = j;
-						}
-					}
-				}
-				move(maxX, maxY, p1Turn);
-			}
-			else {
-				
-			}
-		}
-		p1Turn=!p1Turn;
-	}
-	
-	//Used by takeTurn()
-	public void move(int x, int y, boolean turn) {
-		board[x][y] = turn;
-
-		for(int[] i: getAdjacents(x,y)){			
-			int xi = i[0] - x;
-			int yi = i[1] - y;
-			int xs = i[0];
-			int ys = i[1];
-			int xf,yf;			
-			while(true){
-				if(xs<board.length&&xs>-1&&ys<board.length&&ys>-1){
-					
-					if(board[xs][ys]!=null && board[xs][ys]==turn){
-						xf = xs;
-						yf = ys;
-						
-						while(true){								
-							if(!(xf==x && yf==y)){								
-								board[xf][yf] = turn;
-							}else{
-								break;
-							}
-							xf -= xi;
-							yf -= yi;
-						}
-						break;
-					}else if(board[xs][ys]==null){
-						break;
-					}
-				}else{
-					break;
-				}
-				xs += xi;
-				ys += yi;
-			}
-		}
-	}
-	
-	public int[] getScores() {
-		int[] scores = new int[3];
-		for(Boolean[] i : board) {
-			for(Boolean j : i) {
-				if(j != null && j)
-					scores[0]++;
-				else if(j != null && !j)
-					scores[1]++;
-				else
-					scores[2]++;
-			}
-		}
-		if(scores[0] > scores[1])
-			scores[0] += scores[2];
-		else if(scores[0] < scores[1])
-			scores[1] += scores[2];
-			
-		
-		return scores;
-	}
-	
 	public static void main(String[] args) {
-		int[] winsLossesTies = new int[3];
-		for(int i = 0; i < 100000; i++) {
-			Othello o = new Othello(8);
-			while(!o.isGameOver) {
-				/*for(int i = 0; i < 8; i++){
-				for(int j = 0; j < 8; j++)
-					System.out.print(o.board[j][i]!=null?(o.board[j][i]?"X":"O"):"-");
-				System.out.println();
-			}
-			System.out.println();*/
-
-				o.takeTurn();
-			}
-			int[] scores = o.getScores();
-			if(scores[0] > scores[1])
-				winsLossesTies[0]++;
-			else if(scores[0] < scores[1])
-				winsLossesTies[1]++;
-			else
-				winsLossesTies[2]++;
+		int popSize = 100;
+		int gamesPer = 100;
+		int iterations = 25;
+		neuralNet[] population = new neuralNet[popSize];
+		int hiddenLayers = 8;
+		int neuronsPerLayer = 8;
+		for(int i = 0; i < popSize; i++) {
+			population[i] = new neuralNet(64,hiddenLayers,neuronsPerLayer,64);
 		}
-		System.out.println("Black: " + winsLossesTies[0]);
-		System.out.println("White: " + winsLossesTies[1]);
-		System.out.println("Ties: " + winsLossesTies[2]);
-		
-		/*int[] arr = o.getScores();
-		System.out.println(arr[0] + " v " + arr[1]);*/
+		OthelloBoard board = new OthelloBoard(8);
+		int[] winsLossesTies = new int[3];
+		for(int iteration = 0; iteration < iterations; iteration++) {
+			for(neuralNet net:population) {
+				winsLossesTies[0] = winsLossesTies[1] = winsLossesTies[2] = 0;
+				for(int i = 0; i < gamesPer; i++) {				
+					while(!board.isGameOver) {
+						if(i<gamesPer/2) {
+							board.takeTurn();
+							net.takeTurn(board, false);		
+						}else {							
+							net.takeTurn(board, true);
+							board.takeTurn();
+						}
+					}
+					int[] scores = board.getScores();
+					if((scores[0] > scores[1]&&i<gamesPer/2)||(scores[0] < scores[1]&&i>gamesPer/2))
+						winsLossesTies[0]++;
+					else if((scores[0] < scores[1]&&i<gamesPer/2)||(scores[0] > scores[1]&&i>gamesPer/2))
+						winsLossesTies[1]++;
+					else
+						winsLossesTies[2]++;
+					board.resetBoard();
+				}
+				net.fitness = winsLossesTies[1] + winsLossesTies[2] * 0.5;
+			}
+			Arrays.sort(population);
+			System.out.println(population[0].fitness + ", " + population[popSize-1].fitness);
+			
+			//Selecting parents for the next generation
+			neuralNet[] parents = new neuralNet[6*popSize/10];
+			for(int parent = 0; parent < parents.length; parent++)
+			{
+				//Tournament selection breeding of the top 10% of the population
+				int k = 4;
+				for(int i = 0; i < popSize*0.6; i++)
+				{
+					neuralNet[] tournament = new neuralNet[k];
+					neuralNet[] populationCopy = population.clone();
+					for(int l = 0; l < k; l++)
+					{
+						int contestant;
+						do {
+							contestant = (int)(Math.random()*popSize*0.1);
+							tournament[l]=populationCopy[contestant];
+						} while(tournament[l] == null);
+						populationCopy[l] = null;
+					}
+					double p = 0.75;
+					
+					Arrays.sort(tournament);
+					parents[parent] = tournament[0];
+					double rng = Math.random();
+					for(int j = k; j > 0; j--) {
+						if(p*Math.pow(1-p, j)-rng >= 0)
+							parents[parent] = tournament[j-1];
+					}
+					/*double[] probabilities = new double[k];
+					for(int j = 0; j < k; j++)
+						probabilities[j]=p*Math.pow(1-p,j);
+					double seed = Math.random();
+					int choice = 0;
+					while(seed>probabilities[choice])
+					{
+						seed-=probabilities[choice];
+						choice+=1;
+					}
+					
+					parents[parent] = tournament[choice];*/
+				}
+			}
+			for(int i = 0; i < parents.length; i+=2)
+			{
+				population[popSize-1-i/2]=nextGen.xOver(parents[i],parents[i+1]);
+			}
+			
+			for(int i = popSize/10; i < 7*popSize/10; i++)
+			{
+				nextGen.mutate(population[i], 0.001*(1+i-popSize/10)/6);
+			}
+		}
 	}
 }
