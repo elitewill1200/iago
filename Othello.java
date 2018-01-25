@@ -38,14 +38,16 @@ public class Othello {
 				net.fitness = winsLossesTies[1] + winsLossesTies[2] * 0.5;
 			}
 			Arrays.sort(population);
-			System.out.println(population[0].fitness + ", " + population[popSize-1].fitness);
+			for(int i = 0; i < popSize; i++) {
+				System.out.println(iteration+", "+population[i].fitness);
+			}
 			
 			//Selecting parents for the next generation
 			neuralNet[] parents = new neuralNet[6*popSize/10];
 			for(int parent = 0; parent < parents.length; parent++)
 			{
 				//Tournament selection breeding of the top 10% of the population
-				int k = 4;
+				int k = 5;
 				for(int i = 0; i < popSize*0.6; i++)
 				{
 					neuralNet[] tournament = new neuralNet[k];
@@ -65,8 +67,10 @@ public class Othello {
 					parents[parent] = tournament[0];
 					double rng = Math.random();
 					for(int j = k; j > 0; j--) {
-						if(p*Math.pow(1-p, j)-rng >= 0)
+						if(p*Math.pow(1-p, j) - rng >= 0) {
 							parents[parent] = tournament[j-1];
+						}
+						rng -= p*Math.pow(1-p, j);
 					}
 					/*double[] probabilities = new double[k];
 					for(int j = 0; j < k; j++)
