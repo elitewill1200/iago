@@ -19,16 +19,16 @@ public class nextGen {
 	public static void mutate(neuralNet p1,double factor) {
 		for(int x = 0; x < p1.neuronsPerLayer; x++)
 			for(int y = 0; y <= p1.inputs; y++)
-				p1.inputLayer[x][y] = Math.random() > factor?p1.inputLayer[x][y]:(-10 + (Math.random() * 20));
+				p1.inputLayer[x][y] = (float) (Math.random() > factor?p1.inputLayer[x][y]:(-10 + (Math.random() * 20)));
 				
 		for(int x = 0; x < p1.hiddenLayers-1; x++)
 			for(int y = 0; y < p1. neuronsPerLayer; y++)
 				for(int z = 0; z <= p1.neuronsPerLayer; z++)
-					p1.hiddenNet[x][y][z] = Math.random() > factor?p1.hiddenNet[x][y][z]:(-10 + (Math.random() * 20));
+					p1.hiddenNet[x][y][z] = (float) (Math.random() > factor?p1.hiddenNet[x][y][z]:(-10 + (Math.random() * 20)));
 					
 		for(int x = 0; x < p1.outputs; x++)
 			for(int y = 0; y <= p1.neuronsPerLayer; y++)
-				p1.outputLayer[x][y] = Math.random() > factor?p1.outputLayer[x][y]:(-10 + (Math.random() * 20));
+				p1.outputLayer[x][y] = (float) (Math.random() > factor?p1.outputLayer[x][y]:(-10 + (Math.random() * 20)));
 					
 	}
 }

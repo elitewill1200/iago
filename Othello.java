@@ -1,15 +1,19 @@
+import java.io.IOException;
 import java.util.Arrays;
 
+import com.nativelibs4java.opencl.CLBuildException;
+
 public class Othello {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws CLBuildException, IOException {
 		int popSize = 100;
 		int gamesPer = 100;
 		int iterations = 25;
-		neuralNet[] population = new neuralNet[popSize];
+		neuralNet[] population = new neuralNetGPU[popSize];
 		int hiddenLayers = 8;
 		int neuronsPerLayer = 8;
+		JCL gpu = new JCL();
 		for(int i = 0; i < popSize; i++) {
-			population[i] = new neuralNet(64,hiddenLayers,neuronsPerLayer,64);
+			population[i] = new neuralNetGPU(64,hiddenLayers,neuronsPerLayer,64,gpu);
 		}
 		OthelloBoard board = new OthelloBoard(8);
 		int[] winsLossesTies = new int[3];
@@ -38,10 +42,10 @@ public class Othello {
 				net.fitness = winsLossesTies[1] + winsLossesTies[2] * 0.5;
 			}
 			Arrays.sort(population);
-			for(int i = 0; i < popSize; i++) {
-				System.out.println(iteration+", "+population[i].fitness);
-			}
-			
+			//for(int i = 0; i < popSize; i++) {
+			//	System.out.println(iteration+", "+population[i].fitness);
+			//}
+			System.out.println(iteration+" "+population[0].fitness+" "+population[popSize-1].fitness);
 			//Selecting parents for the next generation
 			neuralNet[] parents = new neuralNet[6*popSize/10];
 			for(int parent = 0; parent < parents.length; parent++)

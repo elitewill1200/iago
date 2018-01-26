@@ -1,7 +1,7 @@
 public class neuralNet implements Comparable<neuralNet>{
-	double[][] inputLayer;
-	double[][][] hiddenNet;
-	double[][] outputLayer;
+	float[][] inputLayer;
+	float[][][] hiddenNet;
+	float[][] outputLayer;
 	int inputs,hiddenLayers,neuronsPerLayer,outputs;
 	double fitness;
 	public neuralNet(int inputs, int hiddenLayers, int neuronsPerLayer, int outputs){
@@ -10,26 +10,26 @@ public class neuralNet implements Comparable<neuralNet>{
 		this.neuronsPerLayer = neuronsPerLayer;
 		this.outputs = outputs;
 		fitness = 0.0;
-		inputLayer = new double[neuronsPerLayer][inputs+1];
+		inputLayer = new float[neuronsPerLayer][inputs+1];
 		for(int x = 0; x < neuronsPerLayer; x++) {
 			for(int y = 0; y <= inputs; y++) {
-				inputLayer[x][y] = -10 + (Math.random() * 20);
+				inputLayer[x][y] = (float) (-10 + (Math.random() * 20));
 			}
 		}
 		if(hiddenLayers>1){
-			hiddenNet = new double[hiddenLayers-1][neuronsPerLayer][neuronsPerLayer+1];
+			hiddenNet = new float[hiddenLayers-1][neuronsPerLayer][neuronsPerLayer+1];
 			for(int x = 0; x < hiddenLayers-1; x++) {
 				for(int y = 0; y < neuronsPerLayer; y++) {
 					for(int z = 0; z <= neuronsPerLayer; z++) {
-						hiddenNet[x][y][z] = -10 + (Math.random() * 20);
+						hiddenNet[x][y][z] = (float) (-10 + (Math.random() * 20));
 					}
 				}
 			}
 		}
-		outputLayer = new double[outputs][neuronsPerLayer+1];
+		outputLayer = new float[outputs][neuronsPerLayer+1];
 		for(int x = 0; x < outputs; x++) {
 			for(int y = 0; y <= neuronsPerLayer; y++) {
-				outputLayer[x][y] = -10 + (Math.random() * 20);
+				outputLayer[x][y] = (float) (-10 + (Math.random() * 20));
 			}
 		}
 	}
@@ -37,9 +37,9 @@ public class neuralNet implements Comparable<neuralNet>{
 	public void takeTurn(OthelloBoard o, boolean minMax){
 		Boolean[][] values = o.getBoard();
 		int[][] legalMoves = o.getLegalMoves();
-		double[] in = new double[neuronsPerLayer];
-		double[] out = new double[neuronsPerLayer];
-		double[] finals = new double[outputs];
+		float[] in = new float[neuronsPerLayer];
+		float[] out = new float[neuronsPerLayer];
+		float[] finals = new float[outputs];
 		int minMaxIndex = 0;
 		for(int x = 0; x < neuronsPerLayer; x++) {
 			for(int y = 0; y < inputs; y++) {
