@@ -1,4 +1,7 @@
-public class neuralNet implements Comparable<neuralNet>{
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class neuralNet implements Comparable<neuralNet>, Serializable{
 	float[][] inputLayer;
 	float[][][] hiddenNet;
 	float[][] outputLayer;
@@ -16,16 +19,16 @@ public class neuralNet implements Comparable<neuralNet>{
 				inputLayer[x][y] = (float) (-10 + (Math.random() * 20));
 			}
 		}
-		if(hiddenLayers>1){
-			hiddenNet = new float[hiddenLayers-1][neuronsPerLayer][neuronsPerLayer+1];
-			for(int x = 0; x < hiddenLayers-1; x++) {
-				for(int y = 0; y < neuronsPerLayer; y++) {
-					for(int z = 0; z <= neuronsPerLayer; z++) {
-						hiddenNet[x][y][z] = (float) (-10 + (Math.random() * 20));
-					}
+		
+		hiddenNet = new float[hiddenLayers][neuronsPerLayer][neuronsPerLayer+1];
+		for(int x = 0; x < hiddenLayers; x++) {
+			for(int y = 0; y < neuronsPerLayer; y++) {
+				for(int z = 0; z <= neuronsPerLayer; z++) {
+					hiddenNet[x][y][z] = (float) (-10 + (Math.random() * 20));
 				}
 			}
 		}
+		
 		outputLayer = new float[outputs][neuronsPerLayer+1];
 		for(int x = 0; x < outputs; x++) {
 			for(int y = 0; y <= neuronsPerLayer; y++) {
@@ -48,7 +51,7 @@ public class neuralNet implements Comparable<neuralNet>{
 			in[x] += inputLayer[x][inputs];
 		}
 
-		for(int x = 0; x < hiddenLayers-1; x++) {
+		for(int x = 0; x < hiddenLayers; x++) {
 			for(int y = 0; y < neuronsPerLayer; y++) {
 				for(int z = 0; z < neuronsPerLayer; z++) {
 					out[y] += hiddenNet[x][y][z] * in[z];

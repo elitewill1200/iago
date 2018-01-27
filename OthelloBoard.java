@@ -5,10 +5,6 @@ public class OthelloBoard {
 	boolean passed, isGameOver;
 	String p1AI, p2AI;
 	
-	//Initialize board with starting pieces, where boardSize is never odd
-	public Boolean[][] getBoard(){
-		return board;
-	}
 	public OthelloBoard(int boardSize) {
 		board = new Boolean[boardSize][boardSize];
 		
@@ -22,6 +18,11 @@ public class OthelloBoard {
 		p1AI = "Greedy";
 		p2AI = "Greedy";
 	}
+	//Initialize board with starting pieces, where boardSize is never odd
+	public Boolean[][] getBoard(){
+		return board;
+	}
+	
 	public void resetBoard() {
 		board = new Boolean[board.length][board.length];
 		
@@ -33,6 +34,7 @@ public class OthelloBoard {
 		p1Turn = true;
 		passed = isGameOver = false;
 	}
+	
 	//Returns a list of ints that are valid coordinates to move to for the given player
 	public int[][] getLegalMoves() {
 		int out[][] = new int[board.length][board.length];		
@@ -82,7 +84,6 @@ public class OthelloBoard {
 				}
 			}
 		}
-		
 		return adjacents;
 	}
 	
