@@ -19,16 +19,18 @@ public class neuralNet implements Comparable<neuralNet>, Serializable{
 				inputLayer[x][y] = (float) (-10 + (Math.random() * 20));
 			}
 		}
-		
-		hiddenNet = new float[hiddenLayers][neuronsPerLayer][neuronsPerLayer+1];
-		for(int x = 0; x < hiddenLayers; x++) {
-			for(int y = 0; y < neuronsPerLayer; y++) {
-				for(int z = 0; z <= neuronsPerLayer; z++) {
-					hiddenNet[x][y][z] = (float) (-10 + (Math.random() * 20));
+
+		if(hiddenLayers>1){
+			hiddenNet = new float[hiddenLayers-1][neuronsPerLayer][neuronsPerLayer+1];
+			for(int x = 0; x < hiddenLayers-1; x++) {
+				for(int y = 0; y < neuronsPerLayer; y++) {
+					for(int z = 0; z <= neuronsPerLayer; z++) {
+						hiddenNet[x][y][z] = (float) (-10 + (Math.random() * 20));
+					}
 				}
 			}
 		}
-		
+
 		outputLayer = new float[outputs][neuronsPerLayer+1];
 		for(int x = 0; x < outputs; x++) {
 			for(int y = 0; y <= neuronsPerLayer; y++) {
@@ -36,7 +38,7 @@ public class neuralNet implements Comparable<neuralNet>, Serializable{
 			}
 		}
 	}
-	
+
 	public void takeTurn(OthelloBoard o, boolean minMax){
 		Boolean[][] values = o.getBoard();
 		int[][] legalMoves = o.getLegalMoves();
@@ -51,7 +53,7 @@ public class neuralNet implements Comparable<neuralNet>, Serializable{
 			in[x] += inputLayer[x][inputs];
 		}
 
-		for(int x = 0; x < hiddenLayers; x++) {
+		for(int x = 0; x < hiddenLayers-1; x++) {
 			for(int y = 0; y < neuronsPerLayer; y++) {
 				for(int z = 0; z < neuronsPerLayer; z++) {
 					out[y] += hiddenNet[x][y][z] * in[z];
@@ -64,12 +66,14 @@ public class neuralNet implements Comparable<neuralNet>, Serializable{
 		}
 
 		for(int x = 0; x < outputs; x++) {
-			for(int y = 0; y < neuronsPerLayer; y++) {
-				finals[x] += outputLayer[x][y] * in[y];
+			if(legalMoves[x%8][x/8]!=0) {
+				for(int y = 0; y < neuronsPerLayer; y++) {
+					finals[x] += outputLayer[x][y] * in[y];
+				}
+				finals[x] += outputLayer[x][neuronsPerLayer];
 			}
-			finals[x] += outputLayer[x][neuronsPerLayer];
 		}
-		
+
 		if(minMax) {
 			for(int i = 1; i < outputs; i++) {
 				if(legalMoves[i%8][i/8]!=0&&(finals[minMaxIndex]<finals[i]||legalMoves[minMaxIndex%8][minMaxIndex/8]==0)) {
@@ -78,7 +82,7 @@ public class neuralNet implements Comparable<neuralNet>, Serializable{
 			}			
 		}else {
 			for(int i = 1; i < outputs; i++) {	
-				
+
 				if(legalMoves[i%8][i/8]!=0&&(finals[minMaxIndex]>finals[i]|legalMoves[minMaxIndex%8][minMaxIndex/8]==0)) {
 					minMaxIndex = i;
 				}
@@ -93,11 +97,11 @@ public class neuralNet implements Comparable<neuralNet>, Serializable{
 
 	@Override
 	public int compareTo(neuralNet compareNet) {
-		
+
 		if(this.fitness<compareNet.fitness)
-	          return 1;
-	    else if(compareNet.fitness<this.fitness)
-	          return -1;
-	    return 0;
+			return 1;
+		else if(compareNet.fitness<this.fitness)
+			return -1;
+		return 0;
 	}
 }
