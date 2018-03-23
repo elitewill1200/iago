@@ -92,6 +92,7 @@ public class neuralNet implements Comparable<neuralNet>, Serializable{
 			o.pass();
 		}else {
 			o.move(minMaxIndex%8, minMaxIndex/8, minMax);
+			System.out.println("Iago moves at: " + (char)(minMaxIndex%8 + 65) + (minMaxIndex/8 + 1));
 		}
 	}
 

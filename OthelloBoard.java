@@ -177,6 +177,7 @@ public class OthelloBoard {
 		return scores;
 	}
 	public void pass() {
+		p1Turn=!p1Turn;
 		if(!passed)
 			passed = true;
 		else
