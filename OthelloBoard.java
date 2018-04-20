@@ -18,6 +18,19 @@ public class OthelloBoard {
 		p1AI = "Random";
 		p2AI = "Greedy";
 	}
+	public OthelloBoard(int boardSize, Boolean[][] inputBoard) {
+		board = inputBoard.clone();
+		
+		board[boardSize/2-1][boardSize/2-1] = false;
+		board[boardSize/2][boardSize/2-1] = true;
+		board[boardSize/2-1][boardSize/2] = true;
+		board[boardSize/2][boardSize/2] = false;
+		
+		p1Turn = true;
+		passed = isGameOver = false;
+		p1AI = "Random";
+		p2AI = "Greedy";
+	}
 	//Initialize board with starting pieces, where boardSize is never odd
 	public Boolean[][] getBoard(){
 		return board;
@@ -113,9 +126,9 @@ public class OthelloBoard {
 			else {
 				int x = 0, y = 0;
 				do{
-					x = (int)(math.random() * 9);
-					y = (int)(math.random() * 9 ); 
-				}while(moves[x][y] > 0)
+					x = (int)(Math.random() * 9);
+					y = (int)(Math.random() * 9); 
+				}while(moves[x][y] > 0);
 				move(x, y, p1Turn);
 			}
 		}		

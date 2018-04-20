@@ -8,14 +8,18 @@ public class Othello {
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmm");
 
 	public static void main(String[] args){		
-		for(int neuronsPerLayer = 1; neuronsPerLayer <= 8;neuronsPerLayer++) 
-			for(int hiddenLayers = 1; hiddenLayers <= 8;hiddenLayers++) {
+		int hiddenLayers = 8;
+		int neuronsPerLayer = 8;
+		Boolean[][] seedBoard = new Boolean[8][8];
+		
+		//ADD PIECES TO SEED BOARD HERE
+		
 				String date = sdf.format(new Timestamp(System.currentTimeMillis()));
 				boolean saveState = true;
 				boolean continueState = false;
 				int popSize = 250;
-				int gamesPer = 250;
-				int totalGens = 150;//###########################################################################################
+				int gamesPer = 100;
+				int totalGens = 1000;//###########################################################################################
 				int mode = 1; //where 0 = net v greedy AI, 1 = net v net, 2 = both
 				neuralNet[] population = new neuralNet[popSize];
 				neuralNet[] oldPopulation =null;
@@ -63,7 +67,7 @@ public class Othello {
 								break;
 							case 0:
 							default:
-								new Thread(new Gameplay(net, i<gamesPer/2? true:false, wins, losses, ties)).start();
+								new Thread(new Gameplay(net, i<gamesPer/2? true:false, wins, losses, ties, seedBoard)).start();
 							}
 
 							//Gameplay gameplay = new Gameplay(net, i<gamesPer/2? true:false);
@@ -105,6 +109,39 @@ public class Othello {
 						net.fitness = (wins.get() + ties.get() * 0.5)/gamesPer * 100;
 					}
 					Arrays.sort(population);
+					if(gen==0)
+					{
+						try (ObjectOutputStream oos =
+								new ObjectOutputStream( 
+										new FileOutputStream(String.format(".\\src\\nets\\L%dNPL%dNGen0.net",hiddenLayers,neuronsPerLayer)))) {
+
+							oos.writeObject(population);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+					if(gen==149)
+					{
+						try (ObjectOutputStream oos =
+								new ObjectOutputStream(
+										new FileOutputStream(String.format(".\\src\\nets\\L%dNPL%dNGen149.net",hiddenLayers,neuronsPerLayer)))) {
+
+							oos.writeObject(population);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+					if(gen==999)
+					{
+						try (ObjectOutputStream oos =
+								new ObjectOutputStream(
+										new FileOutputStream(String.format(".\\src\\nets\\L%dNPL%dNGen999.net",hiddenLayers,neuronsPerLayer)))) {
+
+							oos.writeObject(population);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
 					for(int i = 0; i < popSize/10; i++)
 					{
 						wins.set(0);
@@ -112,7 +149,7 @@ public class Othello {
 						ties.set(0);
 						for(int j = 0; j < 100; j++)
 						{
-							new Thread(new Gameplay(population[i], i<j/2? true:false, wins, losses, ties)).start();
+							new Thread(new Gameplay(population[i], i<j/2? true:false, wins, losses, ties, seedBoard)).start();
 						}
 						while(wins.get() + ties.get() + losses.get() < 100) {					
 						}
@@ -202,5 +239,4 @@ public class Othello {
 					}
 				}
 			}		
-	}
 }

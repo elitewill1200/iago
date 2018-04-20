@@ -6,8 +6,8 @@ public class Gameplay implements Runnable {
 	public boolean minMax;
 	public AtomicInteger wins, losses, ties;
 	
-	public Gameplay(neuralNet net1, boolean minMax, AtomicInteger wins, AtomicInteger losses, AtomicInteger ties) {
-		board = new OthelloBoard(8);
+	public Gameplay(neuralNet net1, boolean minMax, AtomicInteger wins, AtomicInteger losses, AtomicInteger ties, Boolean[][] seedBoard) {
+		board = new OthelloBoard(8, seedBoard);
 		this.net1 = net1;
 		this.minMax = minMax;
 		this.wins = wins;
