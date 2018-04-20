@@ -15,7 +15,7 @@ public class OthelloBoard {
 		
 		p1Turn = true;
 		passed = isGameOver = false;
-		p1AI = "Greedy";
+		p1AI = "Random";
 		p2AI = "Greedy";
 	}
 	//Initialize board with starting pieces, where boardSize is never odd
@@ -111,7 +111,12 @@ public class OthelloBoard {
 				move(maxX, maxY, p1Turn);
 			}
 			else {
-				
+				int x = 0, y = 0;
+				do{
+					x = (int)(math.random() * 9);
+					y = (int)(math.random() * 9 ); 
+				}while(moves[x][y] > 0)
+				move(x, y, p1Turn);
 			}
 		}		
 	}
