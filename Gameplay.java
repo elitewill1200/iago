@@ -27,7 +27,7 @@ public class Gameplay implements Runnable {
 	
 	@Override
 	public void run() {
-		while(!board.isGameOver) {
+		while(!board.getGameOver()) {
 			if(net2 == null) {
 				if(minMax) {
 					board.takeTurn();

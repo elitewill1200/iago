@@ -1,10 +1,10 @@
 
 public class OthelloBoard {
-	private Boolean[][] board;
-	boolean p1Turn; //where true is black and false is white
-	boolean passed, isGameOver;
+	private Boolean[][] board,initial;
+	private boolean p1Turn; //where true is black and false is white
+	private boolean passed, isGameOver;
 	String p1AI, p2AI;
-	
+	private int move;
 	public OthelloBoard(int boardSize) {
 		board = new Boolean[boardSize][boardSize];
 		
@@ -13,37 +13,57 @@ public class OthelloBoard {
 		board[boardSize/2-1][boardSize/2] = true;
 		board[boardSize/2][boardSize/2] = false;
 		
+		initial = new Boolean[boardSize][boardSize];
+		for(int y = 0; y < board.length; y++) 
+			for(int x = 0; x < board.length; x++)
+				initial[x][y] = board[x][y];
 		p1Turn = true;
 		passed = isGameOver = false;
+		p1AI = "Random";
+		p2AI = "Greedy";		
+		
+	}
+	public OthelloBoard(int boardSize, Boolean[][] inputBoard,Boolean[][] initial,int move,boolean p1Turn,boolean passed) {
+		this.move = move;
+		this.initial = initial;
+		board = new Boolean[boardSize][boardSize];
+		for(int y = 0; y < board.length; y++) 
+			for(int x = 0; x < board.length; x++)
+				board[x][y] = inputBoard[x][y];		
+		this.p1Turn = p1Turn;
+		this.passed = passed;
+		isGameOver = false;
 		p1AI = "Random";
 		p2AI = "Greedy";
 	}
 	public OthelloBoard(int boardSize, Boolean[][] inputBoard) {
-		board = inputBoard.clone();
-		
-		board[boardSize/2-1][boardSize/2-1] = false;
-		board[boardSize/2][boardSize/2-1] = true;
-		board[boardSize/2-1][boardSize/2] = true;
-		board[boardSize/2][boardSize/2] = false;
-		
-		p1Turn = true;
-		passed = isGameOver = false;
-		p1AI = "Random";
-		p2AI = "Greedy";
+		this(boardSize,inputBoard,inputBoard,0, true, false);
 	}
 	//Initialize board with starting pieces, where boardSize is never odd
 	public Boolean[][] getBoard(){
 		return board;
 	}
+	public Boolean[][] getInitial(){
+		return initial;
+	}
+	public boolean getPassed() {
+		return passed;
+	}
+	public boolean getGameOver() {
+		return isGameOver;
+	}
+	public boolean getp1Turn() {
+		return p1Turn;
+	}
+	public int getMove() {
+		return move;
+	}
 	
-	public void resetBoard() {
-		board = new Boolean[board.length][board.length];
-		
-		board[board.length/2-1][board.length/2-1] = false;
-		board[board.length/2][board.length/2-1] = true;
-		board[board.length/2-1][board.length/2] = true;
-		board[board.length/2][board.length/2] = false;
-		
+	public void resetBoard() {	
+		move = 0;
+		for(int y = 0; y < board.length; y++) 
+			for(int x = 0; x < board.length; x++)
+				board[x][y] = initial[x][y];		
 		p1Turn = true;
 		passed = isGameOver = false;
 	}
@@ -138,6 +158,7 @@ public class OthelloBoard {
 	public void move(int x, int y, boolean turn) {
 		board[x][y] = turn;
 		passed = false;
+		move++;
 		for(int[] i: getAdjacents(x,y)){			
 			int xi = i[0] - x;
 			int yi = i[1] - y;
@@ -195,10 +216,18 @@ public class OthelloBoard {
 		return scores;
 	}
 	public void pass() {
+		move++;
 		if(!passed)
 			passed = true;
 		else
 			isGameOver = true;		
+	}
+	public void printBoard() {
+		for(int y = 0; y < board.length; y++) {
+			for(int x = 0; x < board.length; x++)
+				System.out.print(board[x][y]==null?" ":(board[x][y]?"X":"O"));
+		System.out.println();
+		}
 	}
 	
 }
