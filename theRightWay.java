@@ -29,8 +29,7 @@ public class theRightWay {
 		while(!search.isEmpty()) {
 			b = search.poll();
 			pastMoves = madeMoves.poll();
-			hasChildren = false;
-			
+			hasChildren = false;			
 			if(b.getGameOver() == false && b.getMove() < maxMoves) {
 				moves = b.getLegalMoves();				
 				for(int x = 0;x < moves.length;x++ ) 

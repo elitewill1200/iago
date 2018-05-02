@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class OthelloBoard {
 	private Boolean[][] board,initial;
@@ -143,12 +144,12 @@ public class OthelloBoard {
 				}
 				move(maxX, maxY, p1Turn);
 			}
-			else {
+			else {				
 				int x = 0, y = 0;
 				do{
-					x = (int)(Math.random() * 9);
-					y = (int)(Math.random() * 9); 
-				}while(moves[x][y] > 0);
+					x = (int)(Math.random() * board.length);
+					y = (int)(Math.random() * board.length); 
+				}while(moves[x][y] == 0);
 				move(x, y, p1Turn);
 			}
 		}		

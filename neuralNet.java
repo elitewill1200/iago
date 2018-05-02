@@ -48,7 +48,7 @@ public class neuralNet implements Comparable<neuralNet>, Serializable{
 		int minMaxIndex = 0;
 		for(int x = 0; x < neuronsPerLayer; x++) {
 			for(int y = 0; y < inputs; y++) {
-				in[x] += inputLayer[x][y] * (values[y%8][y/8]==null?0:(values[y%8][y/8]?1:-1));
+				in[x] += inputLayer[x][y] * (values[y%(int)Math.pow(inputs,0.5)][y/(int)Math.pow(inputs,0.5)]==null?0:(values[y%(int)Math.pow(inputs,0.5)][y/(int)Math.pow(inputs,0.5)]?1:-1));
 			}
 			in[x] += inputLayer[x][inputs];
 		}
@@ -66,7 +66,7 @@ public class neuralNet implements Comparable<neuralNet>, Serializable{
 		}
 
 		for(int x = 0; x < outputs; x++) {
-			if(legalMoves[x%8][x/8]!=0) {
+			if(legalMoves[x%(int)Math.pow(inputs,0.5)][x/(int)Math.pow(inputs,0.5)]!=0) {
 				for(int y = 0; y < neuronsPerLayer; y++) {
 					finals[x] += outputLayer[x][y] * in[y];
 				}
@@ -76,22 +76,22 @@ public class neuralNet implements Comparable<neuralNet>, Serializable{
 
 		if(minMax) {
 			for(int i = 1; i < outputs; i++) {
-				if(legalMoves[i%8][i/8]!=0&&(finals[minMaxIndex]<finals[i]||legalMoves[minMaxIndex%8][minMaxIndex/8]==0)) {
+				if(legalMoves[i%(int)Math.pow(inputs,0.5)][i/(int)Math.pow(inputs,0.5)]!=0&&(finals[minMaxIndex]<finals[i]||legalMoves[minMaxIndex%(int)Math.pow(inputs,0.5)][minMaxIndex/(int)Math.pow(inputs,0.5)]==0)) {
 					minMaxIndex = i;
 				}
 			}			
 		}else {
 			for(int i = 1; i < outputs; i++) {	
 
-				if(legalMoves[i%8][i/8]!=0&&(finals[minMaxIndex]>finals[i]|legalMoves[minMaxIndex%8][minMaxIndex/8]==0)) {
+				if(legalMoves[i%(int)Math.pow(inputs,0.5)][i/(int)Math.pow(inputs,0.5)]!=0&&(finals[minMaxIndex]>finals[i]|legalMoves[minMaxIndex%(int)Math.pow(inputs,0.5)][minMaxIndex/(int)Math.pow(inputs,0.5)]==0)) {
 					minMaxIndex = i;
 				}
 			}	
 		}
-		if(legalMoves[minMaxIndex%8][minMaxIndex/8]==0) {
+		if(legalMoves[minMaxIndex%(int)Math.pow(inputs,0.5)][minMaxIndex/(int)Math.pow(inputs,0.5)]==0) {
 			o.pass();
 		}else {
-			o.move(minMaxIndex%8, minMaxIndex/8, minMax);
+			o.move(minMaxIndex%(int)Math.pow(inputs,0.5), minMaxIndex/(int)Math.pow(inputs,0.5), minMax);
 		}
 	}
 
