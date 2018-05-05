@@ -21,26 +21,26 @@ public class Othello2 {
 	public static void main(String[] args){			
 		ArrayList<Boolean[][]> boards = new ArrayList<Boolean[][]>();
 		
-		//boards.add(createProblemBoard(3, "00", "01"));
-		//boards.add(createProblemBoard(3, "000110", "11"));
-		//boards.add(createProblemBoard(4, "0010", "1112"));
-		//boards.add(createProblemBoard(4, "0110", "1112"));
-		//boards.add(createProblemBoard(5, "000134", "1133"));
-		//boards.add(createProblemBoard(4, "000110", "1112"));
-		//boards.add(createProblemBoard(5, "00010220", "1123"));
-		//boards.add(createProblemBoard(4, "00033033", "112131"));
+		boards.add(createProblemBoard(3, "00", "01"));
+		boards.add(createProblemBoard(3, "000110", "11"));
+		boards.add(createProblemBoard(4, "0010", "1112"));
+		boards.add(createProblemBoard(4, "0110", "1112"));
+		boards.add(createProblemBoard(5, "000134", "1133"));
+		boards.add(createProblemBoard(4, "000110", "1112"));
+		boards.add(createProblemBoard(5, "00010220", "1123"));
+		boards.add(createProblemBoard(4, "00033033", "112131"));
 		//boards.add(createProblemBoard(5, "21", "2224"));
 		boards.add(createProblemBoard(4, "2123", "1220"));
 		boards.add(createProblemBoard(4, "1222", "1121"));
-		//boards.add(createProblemBoard(5, "0024", "1121"));
-		//boards.add(createProblemBoard(5, "002430", "1121"));
-		//boards.add(createProblemBoard(4, "0022313233", "0110111221"));
-		//boards.add(createProblemBoard(4, "010211313233", "1013212223"));
-		//boards.add(createProblemBoard(6, "1112212233344344", "1314232431324142"));
-		//boards.add(createProblemBoard(4, "1222", "1121"));
-		//boards.add(createProblemBoard(4, "1122", "1221"));
+		boards.add(createProblemBoard(5, "0024", "1121"));
+	    boards.add(createProblemBoard(5, "002430", "1121"));
+		boards.add(createProblemBoard(4, "0022313233", "0110111221"));
+		boards.add(createProblemBoard(4, "010211313233", "1013212223"));
+		boards.add(createProblemBoard(6, "1112212233344344", "1314232431324142"));
+		boards.add(createProblemBoard(4, "1222", "1121"));
+		boards.add(createProblemBoard(4, "1122", "1221"));
 		
-		for(int initState = 0; initState < boards.size(); initState++) {
+		for(int initState = 8; initState < boards.size(); initState++) {
 			int[][] generation = new int[8][8];
 			for(int x =0; x < 8; x++)
 				for(int y =0; y<8; y++)
@@ -82,7 +82,7 @@ public class Othello2 {
 					AtomicInteger losses = new AtomicInteger(0);
 					AtomicInteger ties = new AtomicInteger(0);
 					int netIndex;
-					for(int gen = 0; gen < totalGens; gen++) {					
+					for(int gen = 14; gen < totalGens; gen++) {					
 						netIndex = 0;
 						//net2Index = popSize - 1;
 						for(neuralNet net:population) {
